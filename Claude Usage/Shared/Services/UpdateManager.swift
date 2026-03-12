@@ -41,6 +41,9 @@ final class UpdateUserDriver: NSObject, SPUStandardUserDriverDelegate {
 }
 
 /// Manages automatic updates using Sparkle framework
+/// NOTE: Auto-updater DISABLED in this fork — updates are pulled manually via git
+/// after reviewing the upstream diff. The Sparkle updater is not started to prevent
+/// network calls to the upstream appcast URL.
 final class UpdateManager: ObservableObject {
     static let shared = UpdateManager()
 
@@ -48,41 +51,34 @@ final class UpdateManager: ObservableObject {
     private let userDriver: UpdateUserDriver // Keep strong reference
 
     @Published private(set) var canCheckForUpdates: Bool = false
-    @Published private(set) var automaticChecksEnabled: Bool
+    @Published private(set) var automaticChecksEnabled: Bool = false
 
     private init() {
         // Create user driver delegate for gentle reminders
         userDriver = UpdateUserDriver()
 
-        // Initialize Sparkle updater with user driver delegate
+        // DISABLED: startingUpdater set to false to prevent network calls to upstream appcast
         updaterController = SPUStandardUpdaterController(
-            startingUpdater: true,
+            startingUpdater: false,
             updaterDelegate: nil,
             userDriverDelegate: userDriver
         )
 
-        automaticChecksEnabled = updaterController.updater.automaticallyChecksForUpdates
-        canCheckForUpdates = updaterController.updater.canCheckForUpdates
-
-        LoggingService.shared.logInfo("Update manager initialized with gentle reminders")
+        LoggingService.shared.logInfo("Update manager initialized — auto-updater DISABLED in this fork")
     }
 
-    /// Manually check for updates
+    /// Manually check for updates — disabled in this fork
     func checkForUpdates() {
-        updaterController.checkForUpdates(nil)
-        LoggingService.shared.logInfo("Manual update check triggered")
+        LoggingService.shared.logInfo("Update check skipped — disabled in this fork")
     }
 
-    /// Toggle automatic update checks
+    /// Toggle automatic update checks — disabled in this fork
     func setAutomaticChecksEnabled(_ enabled: Bool) {
-        updaterController.updater.automaticallyChecksForUpdates = enabled
-        automaticChecksEnabled = enabled
-        DataStore.shared.userDefaults.set(enabled, forKey: "SUEnableAutomaticChecks")
-        LoggingService.shared.logInfo("Automatic updates: \(enabled)")
+        LoggingService.shared.logInfo("Automatic updates disabled in this fork")
     }
 
     /// Get last update check date
     var lastUpdateCheckDate: Date? {
-        return updaterController.updater.lastUpdateCheckDate
+        return nil
     }
 }

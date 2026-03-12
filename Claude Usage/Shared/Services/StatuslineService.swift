@@ -593,7 +593,7 @@ printf "%s\\n" "$output"
 
         try swiftScriptContent.write(to: swiftDestination, atomically: true, encoding: .utf8)
         try FileManager.default.setAttributes(
-            [.posixPermissions: 0o755],
+            [.posixPermissions: 0o700],
             ofItemAtPath: swiftDestination.path
         )
 
@@ -601,7 +601,7 @@ printf "%s\\n" "$output"
         let bashDestination = claudeDir.appendingPathComponent("statusline-command.sh")
         try bashScript.write(to: bashDestination, atomically: true, encoding: .utf8)
         try FileManager.default.setAttributes(
-            [.posixPermissions: 0o755],
+            [.posixPermissions: 0o700],
             ofItemAtPath: bashDestination.path
         )
 
@@ -616,7 +616,7 @@ printf "%s\\n" "$output"
         // Replace with placeholder script that returns error
         try placeholderSwiftScript.write(to: swiftDestination, atomically: true, encoding: .utf8)
         try FileManager.default.setAttributes(
-            [.posixPermissions: 0o755],
+            [.posixPermissions: 0o700],
             ofItemAtPath: swiftDestination.path
         )
 
